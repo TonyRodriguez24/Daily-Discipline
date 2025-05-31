@@ -4,7 +4,8 @@ const logsRoutes = require('./routes/logs')
 const authRoutes = require('./routes/auth')
 
 const ExpressError = require('./expressError')
-
+const cors = require('cors');
+app.use(cors());
 app.use(express.json());
 app.use('/auth', authRoutes)
 app.use('/logs', logsRoutes);
