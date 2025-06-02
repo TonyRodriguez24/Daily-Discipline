@@ -1,0 +1,36 @@
+{
+  "type": "object",
+  "required": [
+    "didWorkout",
+    "sleepHours",
+    "githubCommits",
+    "screenTime",
+    "weight"
+  ],
+  "properties": {
+    "didWorkout": {
+      "type": "boolean"
+    },
+    "sleepHours": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 24
+    },
+    "githubCommits": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 50
+    },
+    "screenTime": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 24
+    },
+    "weight": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 300
+    }
+  },
+  "additionalProperties": false
+}

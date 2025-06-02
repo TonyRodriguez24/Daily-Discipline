@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/layout/Navbar.jsx";
@@ -11,15 +12,16 @@ import Register from "./pages/Register.jsx";
 import Stats from "./pages/Stats.jsx";
 
 function App() {
+  const [token, setToken] = useState(() => localStorage.getItem("token"));
   return (
     <>
-      <Navbar/>
+      <Navbar token={token} setToken={setToken} />
       <Routes>
         <Route index element={<Home />} />
         <Route path="/account" element={<Account />} />
         <Route path="/daily-log" element={<DailyLog />} />
         <Route path="/history" element={<History />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login setToken={setToken} />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/register" element={<Register />} />
         <Route path="/stats" element={<Stats />} />

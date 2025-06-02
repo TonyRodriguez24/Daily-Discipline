@@ -1,19 +1,30 @@
 import { useContext, useState } from "react";
-import {login} from '../api/dailyDisciplineApi';
+import { login } from '../api/dailyDisciplineApi';
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
-export default function Login() {
+export default function Login({setToken}) {
   const INITIAL_STATE = {
     username: "",
     password: "",
   };
   const [formData, setFormData] = useState(INITIAL_STATE);
+  const navigate = useNavigate()
+  const token = localStorage.getItem('token')
+
+  useEffect(() => {
+    if (token) {
+      navigate('/')
+    }
+  }, [token])
 
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
       const {token} = await login(formData)
       localStorage.setItem("token", token)
-      console.log(token)
+      setToken(token)
+      navigate('/')
       setFormData(INITIAL_STATE);
     } catch (error) {
       console.log(error);
