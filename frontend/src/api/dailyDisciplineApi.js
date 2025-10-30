@@ -17,3 +17,12 @@ export async function login(formData) {
     const token = response.data;
     return token;
 }
+
+export async function createLog(formData, token) {
+    const response = await axios.post(`${BASE_URL}/logs`, formData, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    return response;
+}

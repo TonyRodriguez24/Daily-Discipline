@@ -15,6 +15,10 @@ function App() {
   const [token, setToken] = useState(() => localStorage.getItem("token"));
   return (
     <>
+      <style>
+        @import
+        url('https://fonts.googleapis.com/css2?family=Momo+Trust+Display&display=swap');
+      </style>
       <Navbar token={token} setToken={setToken} />
       <Routes>
         <Route index element={<Home />} />

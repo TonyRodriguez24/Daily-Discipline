@@ -9,10 +9,22 @@ router.use(authenticateJWT)
 router.post('/', async (req, res, next) => {
     try {
         const userId = req.user.id;
-        const {date, didWorkout, sleepHours, githubCommits, screenTime, weight} = req.body
-        const newLog = await Log.createLog(userId, date, didWorkout, sleepHours, githubCommits, screenTime, weight)
+        const { date, didWorkout, sleepHours, githubCommits, screenTime, weight } = req.body
+
+        function parseNumber(value) {
+            const num = parseFloat(value)
+            return isNaN(num) ? null : num;
+        }
+        const sleepHoursNum = parseNumber(sleepHours);
+        const githubCommitsNum = parseNumber(githubCommits);
+        const screenTimeNum = parseNumber(screenTime);
+        const weightNum = parseNumber(weight);
+
+        const newLog = await Log.createLog(userId, date, didWorkout, sleepHoursNum, githubCommitsNum, screenTimeNum, weightNum)
+        console.log(newLog)
         return res.status(201).json(newLog)
     } catch (error) {
+        console.log(error)
     return next(error)        
     }
 })
