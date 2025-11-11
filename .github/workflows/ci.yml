@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-backend-and-frontend:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres" --health-interval=10s --health-timeout=5s --health-retries=5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Cache backend node modules
+        uses: actions/cache@v4
+        with:
+          path: backend/node_modules
+          key: backend-node-modules-${{ hashFiles('backend/package-lock.json') }}
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: Wait for Postgres
+        run: |
+          until pg_isready -h localhost -p 5432 -U postgres; do sleep 1; done
+        env:
+          PGPASSWORD: postgres
+
+      - name: Apply DB schema
+        working-directory: backend
+        run: |
+          apt-get update && apt-get install -y postgresql-client
+          PGPASSWORD=postgres psql -h localhost -U postgres -d postgres -f schema.sql
+
+      - name: Run backend tests (unit + integration)
+        working-directory: backend
+        env:
+          DB_URI: postgres://postgres:postgres@localhost:5432/postgres
+        run: npm test --silent
+
+      - name: Cache frontend node modules
+        uses: actions/cache@v4
+        with:
+          path: frontend/node_modules
+          key: frontend-node-modules-${{ hashFiles('frontend/package-lock.json') }}
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Run frontend tests
+        working-directory: frontend
+        run: npm test -- --run
