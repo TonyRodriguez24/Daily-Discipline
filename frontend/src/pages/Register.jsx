@@ -18,7 +18,6 @@ export default function Register() {
         e.preventDefault();
         const {token} = await register(formData)
         localStorage.setItem("token", token)
-        setToken(token)
         navigate('/')
         setFormData(INITIAL_STATE);
       } catch (error) {
