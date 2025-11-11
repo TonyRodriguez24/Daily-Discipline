@@ -9,34 +9,34 @@ const jwt = require('jsonwebtoken');
 const app = require('../../app');
 
 describe('Auth routes', () => {
-  beforeEach(() => jest.clearAllMocks());
+    beforeEach(() => jest.clearAllMocks());
 
-  test('POST /auth/register creates a user and returns username', async () => {
-    bcrypt.hash.mockResolvedValue('hashedpw');
-    db.query.mockResolvedValueOnce({ rows: [{ username: 'alice' }] });
+    test('POST /auth/register creates a user and returns username', async () => {
+        bcrypt.hash.mockResolvedValue('hashedpw');
+        db.query.mockResolvedValueOnce({ rows: [{ username: 'alice' }] });
 
-    const resp = await request(app)
-      .post('/auth/register')
-      .send({ username: 'alice', password: 'password' });
+        const resp = await request(app)
+            .post('/auth/register')
+            .send({ username: 'alice', password: 'password' });
 
-    expect(resp.statusCode).toBe(201);
-    expect(resp.body).toEqual({ username: 'alice' });
-    expect(bcrypt.hash).toHaveBeenCalled();
-  });
+        expect(resp.statusCode).toBe(201);
+        expect(resp.body).toEqual({ username: 'alice' });
+        expect(bcrypt.hash).toHaveBeenCalled();
+    });
 
-  test('POST /auth/login returns token when credentials valid', async () => {
-    const userRow = { id: 7, username: 'bob', password: 'hashedpw' };
-    db.query.mockResolvedValueOnce({ rows: [userRow] });
-    bcrypt.compare.mockResolvedValue(true);
-    jwt.sign.mockReturnValue('tok123');
+    test('POST /auth/login returns token when credentials valid', async () => {
+        const userRow = { id: 7, username: 'bob', password: 'hashedpw' };
+        db.query.mockResolvedValueOnce({ rows: [userRow] });
+        bcrypt.compare.mockResolvedValue(true);
+        jwt.sign.mockReturnValue('tok123');
 
-    const resp = await request(app)
-      .post('/auth/login')
-      .send({ username: 'bob', password: 'secret' });
+        const resp = await request(app)
+            .post('/auth/login')
+            .send({ username: 'bob', password: 'secret' });
 
-    expect(resp.statusCode).toBe(200);
-    expect(resp.body).toEqual({ message: 'logged in', token: 'tok123' });
-    expect(bcrypt.compare).toHaveBeenCalled();
-    expect(jwt.sign).toHaveBeenCalled();
-  });
+        expect(resp.statusCode).toBe(200);
+        expect(resp.body).toEqual({ message: 'logged in', token: 'tok123' });
+        expect(bcrypt.compare).toHaveBeenCalled();
+        expect(jwt.sign).toHaveBeenCalled();
+    });
 });
