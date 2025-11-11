@@ -17,7 +17,7 @@ export default function Register() {
     e.preventDefault();
     try {
       await register(formData);
-      navigate("/login"); // redirect to login
+      navigate("/login"); 
       setFormData(INITIAL_STATE);
     } catch (error) {
       console.error(error);

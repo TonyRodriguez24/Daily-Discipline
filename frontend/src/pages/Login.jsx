@@ -19,13 +19,15 @@ export default function Login({setToken}) {
   }, [token])
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
     try {
-      await register(formData); // no token expected
-      navigate("/login"); // send user to login page
+      e.preventDefault();
+      const {token} = await login(formData)
+      localStorage.setItem("token", token)
+      setToken(token)
+      navigate('/')
       setFormData(INITIAL_STATE);
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
 
