@@ -10,6 +10,7 @@ import Login from "./pages/Login.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import Register from "./pages/Register.jsx";
 import Stats from "./pages/Stats.jsx";
+import EditLog from "./pages/EditLog.jsx";
 
 function App() {
   const [token, setToken] = useState(() => localStorage.getItem("token"));
@@ -23,6 +24,7 @@ function App() {
       <Routes>
         <Route index element={<Home />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/daily-log/edit/:id" element={<EditLog />} />
         <Route path="/daily-log" element={<DailyLog />} />
         <Route path="/history" element={<History />} />
         <Route path="/login" element={<Login setToken={setToken} />} />

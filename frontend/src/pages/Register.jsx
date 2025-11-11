@@ -1,7 +1,50 @@
-export default function Register() {
+export default function Register() {  
+
+  const handleSubmit = () => {
+
+  }
+
+  const handleChange = () => {
+
+  }
+
+  const formData = {
+    username: "",
+    password: ""
+  }
+
+   const styles = "p-3 bg-stone-200 border-2 border-indigo-200 focus:outline-indigo-500 rounded-md";
+
+
   return (
     <>
-      <h1>Register</h1>
+      <div className="p-3 flex flex-col justify-center items-center gap-4">
+        <h1 className="text-3xl p-10 pb-5 text-center">Get Started on Building Healthier Habits!</h1>
+        <form onSubmit={handleSubmit} className="flex flex-col lg:w-1/6 gap-6">
+          <input
+            type="text"
+            id="username"
+            onChange={handleChange}
+            value={formData.username}
+            name="username"
+            placeholder="Enter username"
+            className={styles}
+          />
+          <input
+            type="password"
+            id="password"
+            onChange={handleChange}
+            value={formData.password}
+            name="password"
+            placeholder="Enter password"
+            className={styles}
+          />
+
+          <button className="py-3 px-4 rounded-md bg-blue-700 text-white cursor-pointer">
+            Register
+          </button>
+        </form>
+      </div>
     </>
   );
 }

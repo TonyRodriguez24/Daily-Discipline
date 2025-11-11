@@ -1,22 +1,44 @@
-import { useState } from "react";
-import { createLog } from "../api/dailyDisciplineApi";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { editLog, getLogById } from "../api/dailyDisciplineApi";
 import Counter from "../components/layout/Counter";
-import { useNavigate } from "react-router-dom";
 
-export default function DailyLog() {
+export default function EditLog() {
   const INITIAL_STATE = {
     didWorkout: false,
-    sleepHours: 7,
+    sleepHours: 0,
     githubCommits: 0,
-    screenTime: 5,
+    screenTime: 0,
     weight: "",
     date: new Date().toISOString().split("T")[0],
   };
 
   const [formData, setFormData] = useState(INITIAL_STATE);
+  let params = useParams();
+  let id = params.id;
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const getLog = async () => {
+      const token = localStorage.getItem("token");
+      const response = await getLogById(id, token);
+      console.log(response.data);
+      const mappedData = {
+        didWorkout: response.data.did_workout,
+        sleepHours: response.data.sleep_hours,
+        githubCommits: response.data.github_commits,
+        screenTime: response.data.screen_time,
+        weight: response.data.weight,
+        date: response.data.date.split("T")[0],
+      };
+
+      setFormData(mappedData);
+    };
+
+    getLog();
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -29,18 +51,26 @@ export default function DailyLog() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
-    if (!token) return;
-
-    setIsLoading(true);
+      if (!token) return;
+      
+      setIsLoading(true);
 
     try {
-      const res = await createLog(formData, token);
+      const mappedData = {
+        did_workout: formData.didWorkout,
+        sleep_hours: formData.sleepHours,
+        github_commits: formData.githubCommits,
+        screen_time: formData.screenTime,
+        weight: formData.weight,
+        date: formData.date,
+      };
+      const res = await editLog(mappedData, id, token);
       console.log(res);
-      setIsSubmitted(true);
+        setIsSubmitted(true);
 
-       setTimeout(() => {
-         navigate("/history");
-       }, 2000);
+        setTimeout(() => {
+          navigate("/history");
+        }, 2000);
     } catch (error) {
       console.log(error);
     } finally {
@@ -73,7 +103,8 @@ export default function DailyLog() {
         <div className="flex">
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col justify-center items-center lg:w-1/3 text-black my-7 mx-auto gap-2 p-6 rounded-lg shadow-md border-4 border-gray-700 bg-zinc-200">
+            className="flex flex-col justify-center items-center lg:w-1/3 text-black my-7 mx-auto bg-zinc-200 gap-2 p-6 rounded-md border-4 border-gray-700">
+           
             {/* Did Workout */}
             <div className="w-full p-1 rounded-lg flex flex-col items-center gap-3">
               <p className="text-2xl font-bold">Did You Work Out?</p>
@@ -146,15 +177,22 @@ export default function DailyLog() {
                 name="date"
                 value={formData.date}
                 onChange={handleChange}
-                className="border-2 border-black rounded px-2 py-1 w-1/2 text-2xl flex items-center justify-evenly bg-white"
+                className="border-2 border-black rounded px-2 py-1 w-1/2 text-2xl bg-white flex items-center justify-evenly"
               />
             </div>
 
-            <button
-              type="submit"
-              className="cursor-pointer bg-blue-600 hover:bg-blue-700 transition text-white py-2 px-4 rounded mt-4">
-              Submit Log
-            </button>
+            <div className="flex gap-2">
+              <button
+                type="submit"
+                className="cursor-pointer bg-blue-600 hover:bg-blue-800 transition text-white py-2 px-4 rounded mt-4">
+                Save Changes
+              </button>
+              <button
+                onClick={() => navigate(-1)}
+                className="cursor-pointer bg-red-500 hover:bg-red-700 transition text-white py-2 px-4 rounded mt-4">
+                Go Back
+              </button>
+            </div>
           </form>
         </div>
       )}

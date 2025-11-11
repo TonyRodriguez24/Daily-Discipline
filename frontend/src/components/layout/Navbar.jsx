@@ -1,13 +1,17 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Navbar({ token, setToken }) {
+  let navigate = useNavigate();
   return (
     <nav>
-      <ul className="flex justify-center w-full mx-auto text-black text-xl items-center gap-15 bg-green-300 px-20 py-2  mb-2">
+      <ul className="flex justify-center w-full mx-auto h-18 text-black lg:text-lg items-center gap-4 lg:gap-15 bg-emerald-500 lg:px-20 border-b-4 border-emerald-900">
         {token && (
           <>
             <li>
-              <Link to="/daily-log">Create Log</Link>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/daily-log">Add Log</Link>
             </li>
             <li>
               <Link to="/history">History</Link>
@@ -15,9 +19,7 @@ export default function Navbar({ token, setToken }) {
             <li>
               <Link to="/stats">Stats</Link>
             </li>
-            <li>
-              <Link to="/account">Account</Link>
-            </li>
+           
           </>
         )}
 
@@ -29,6 +31,7 @@ export default function Navbar({ token, setToken }) {
               onClick={() => {
                 localStorage.removeItem("token");
                 setToken(null);
+                navigate('/login')
               }}>
               Logout
             </button>

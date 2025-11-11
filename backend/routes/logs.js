@@ -41,26 +41,37 @@ router.get('/', async (req, res, next) => {
 
 })
 
-//get log by date
-router.get('/:date', async (req, res, next) => {
+//get log by log id
+router.get('/:id', async (req, res, next) => {
     try {
         const userId = req.user.id;
-        const date = req.params.date;
-        const log = await Log.getLogById(userId, date)
+        const id = req.params.id;
+        const log = await Log.getLogById(userId, id)
         return res.json(log)
     } catch (error) {
         return next(error)
     }
 })
 
-
-router.patch('/:date', async (req, res, next) => {
+//edit a log by log id
+router.patch('/:id', authenticateJWT, async (req, res, next) => {
     try {
-        const userId = req.user.id
-        const date = req.params.date
-        const { didWorkout, sleepHours, githubCommits, screenTime, weight } = req.body
-        const updatedLog = await Log.updateLog(userId, date, {didWorkout, sleepHours, githubCommits, screenTime, weight} )
-        return res.json(updatedLog)
+        const userId = req.user.id;       
+        const logId = req.params.id;      
+        const updatedLog = await Log.updateLog(userId, logId, req.body);
+        return res.json({ log: updatedLog });
+    } catch (err) {
+        return next(err);
+    }
+});
+
+//delete a log by id 
+router.delete('/:id', authenticateJWT, async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+        const logId = req.params.id;
+        const deletedLog = await Log.deleteLog(userId, logId)
+        return res.json({log: deletedLog})
     } catch (error) {
         return next(error)
     }

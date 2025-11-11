@@ -1,10 +1,21 @@
-const { Client } = require('pg');
-const { DB_URI } = require('./config')
+const { Pool } = require("pg");
+const { DB_URI } = require("./config");
 
-const client = new Client({
-    connectionString: DB_URI
-})
+// Create a Postgres pool using your Supabase DATABASE_URL
+const pool = new Pool({ connectionString: DB_URI });
 
-client.connect();
+// Export the pool for your app to use
+module.exports = pool;
 
-module.exports = client;
+// Optional: test connection only when running this file directly
+if (require.main === module) {
+    (async () => {
+        try {
+            const res = await pool.query("SELECT NOW()");
+            console.log("Connected to Supabase! Server time:", res.rows[0]);
+            await pool.end();
+        } catch (err) {
+            console.error("Connection failed:", err);
+        }
+    })();
+}

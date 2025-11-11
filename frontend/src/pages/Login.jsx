@@ -39,11 +39,13 @@ export default function Login({setToken}) {
     }));
   };
 
-  const styles = "p-4 bg-gray-800 border-2 border-black rounded-md";
+     const styles =
+       "p-3 bg-stone-200 border-2 border-indigo-200 focus:outline-indigo-500 rounded-md";
+
 
   return (
     <div className="p-3 flex flex-col justify-center items-center gap-4">
-      <h1 className="text-2xl text-center">Login</h1>
+      <h1 className="text-3xl p-10 pb-5 text-center">Login</h1>
       <form onSubmit={handleSubmit} className="flex flex-col lg:w-1/6 gap-6">
         <input
           type="text"
@@ -64,7 +66,7 @@ export default function Login({setToken}) {
           className={styles}
         />
 
-        <button className="py-3 px-4 rounded-md bg-blue-500 cursor-pointer">
+        <button className="py-3 px-4 rounded-md bg-blue-700 text-white cursor-pointer">
           Login
         </button>
       </form>

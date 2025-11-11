@@ -18,12 +18,18 @@ export default function Counter({ formData, setFormData, field, step }) {
   return (
     <div>
       <div className="flex gap-3 justify-center items-center">
-        <button type="button" onClick={handleDecrement} className="cursor-pointer">
-          <CiCircleMinus className="text-4xl text-red-500" />
+        <button
+          type="button"
+          onClick={handleDecrement}
+          className="cursor-pointer">
+          <CiCircleMinus className="text-4xl text-red-500 bg-black rounded-full" />
         </button>
         <span className="text-3xl font-bold">{formData[field]}</span>
-        <button type="button" onClick={handleIncrement} className="cursor-pointer">
-          <CiCirclePlus className="text-4xl text-green-500" />
+        <button
+          type="button"
+          onClick={handleIncrement}
+          className="cursor-pointer">
+          <CiCirclePlus className="text-4xl bg-black rounded-full text-emerald-300" />
         </button>
       </div>
     </div>
