@@ -16,7 +16,8 @@ export default function DailyLog() {
   const [formData, setFormData] = useState(INITIAL_STATE);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate()
+  const [error, setError] = useState(null); // <-- New state for errors
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -32,17 +33,19 @@ export default function DailyLog() {
     if (!token) return;
 
     setIsLoading(true);
+    setError(null); // reset previous errors
 
     try {
       const res = await createLog(formData, token);
       console.log(res);
       setIsSubmitted(true);
 
-       setTimeout(() => {
-         navigate("/history");
-       }, 2000);
-    } catch (error) {
-      console.log(error);
+      setTimeout(() => {
+        navigate("/history");
+      }, 2000);
+    } catch (err) {
+      console.error(err);
+      setError("Failed to submit log. Please try again."); // <-- set error message
     } finally {
       setIsLoading(false);
     }
@@ -51,7 +54,7 @@ export default function DailyLog() {
   return (
     <>
       {isSubmitted && !isLoading ? (
-        <div className="flex flex-col items-center justify-center w-2/3  mt-20 mx-auto p-6 bg-green-100 border border-green-400 rounded-lg shadow-md">
+        <div className="flex flex-col items-center justify-center w-2/3 mt-20 mx-auto p-6 bg-green-100 border border-green-400 rounded-lg shadow-md">
           <svg
             className="w-12 h-12 text-green-600 mb-4"
             fill="none"
@@ -70,7 +73,14 @@ export default function DailyLog() {
           </p>
         </div>
       ) : (
-        <div className="flex">
+        <div className="flex flex-col items-center w-full">
+          {/* Error message */}
+          {error && (
+            <div className="w-2/3 my-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-center">
+              {error}
+            </div>
+          )}
+
           <form
             onSubmit={handleSubmit}
             className="flex flex-col justify-center items-center lg:w-1/3 text-black my-7 mx-auto gap-2 p-6 rounded-lg shadow-md border-4 border-gray-700 bg-zinc-200">
@@ -104,6 +114,7 @@ export default function DailyLog() {
               />
             </div>
 
+            {/* Github Commits */}
             <div className="flex flex-col items-center gap-4 text-sm w-full p-3 rounded">
               <p className="text-2xl font-bold">Github Commits</p>
               <Counter
@@ -114,6 +125,7 @@ export default function DailyLog() {
               />
             </div>
 
+            {/* Screen Time */}
             <div className="flex flex-col items-center gap-4 text-sm w-full p-3 rounded">
               <p className="text-2xl font-bold">Screen Time</p>
               <Counter
@@ -137,6 +149,8 @@ export default function DailyLog() {
                 className="border-2 border-black rounded px-2 py-1 w-1/5 text-2xl bg-white"
               />
             </div>
+
+            {/* Date */}
             <div className="flex flex-col justify-center items-center w-full p-3 rounded">
               <label htmlFor="date" className="text-2xl mb-1 font-medium">
                 Date

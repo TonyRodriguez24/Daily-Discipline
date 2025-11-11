@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { editLog, getLogById } from "../api/dailyDisciplineApi";
 import Counter from "../components/layout/Counter";
+import { deleteLog } from "../api/dailyDisciplineApi";
 
 export default function EditLog() {
   const INITIAL_STATE = {
@@ -51,9 +52,9 @@ export default function EditLog() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
-      if (!token) return;
-      
-      setIsLoading(true);
+    if (!token) return;
+
+    setIsLoading(true);
 
     try {
       const mappedData = {
@@ -66,11 +67,11 @@ export default function EditLog() {
       };
       const res = await editLog(mappedData, id, token);
       console.log(res);
-        setIsSubmitted(true);
+      setIsSubmitted(true);
 
-        setTimeout(() => {
-          navigate("/history");
-        }, 2000);
+      setTimeout(() => {
+        navigate("/history");
+      }, 2000);
     } catch (error) {
       console.log(error);
     } finally {
@@ -103,8 +104,21 @@ export default function EditLog() {
         <div className="flex">
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col justify-center items-center lg:w-1/3 text-black my-7 mx-auto bg-zinc-200 gap-2 p-6 rounded-md border-4 border-gray-700">
-           
+            className="flex flex-col relative justify-center items-center lg:w-1/3 text-black my-7 mx-auto bg-zinc-200 gap-2 p-6 rounded-md border-4 border-gray-700">
+            <button
+              to={`/daily-log/${id}`}
+              onClick={async () => {
+                try {
+                  const token = localStorage.getItem("token");
+                  await deleteLog(id, token);
+                  navigate('/history')
+                } catch (error) {
+                  console.error(error);
+                }
+              }}
+              className="absolute cursor-pointer hover:bg-red-700 top-0 left-0 p-2 bg-red-400 text-white rounded-br-xl curser-pointer ">
+              Delete Log
+            </button>
             {/* Did Workout */}
             <div className="w-full p-1 rounded-lg flex flex-col items-center gap-3">
               <p className="text-2xl font-bold">Did You Work Out?</p>
@@ -189,7 +203,7 @@ export default function EditLog() {
               </button>
               <button
                 onClick={() => navigate(-1)}
-                className="cursor-pointer bg-red-500 hover:bg-red-700 transition text-white py-2 px-4 rounded mt-4">
+                className="cursor-pointer bg-gray-400 hover:bg-gray-700 transition text-white py-2 px-4 rounded mt-4">
                 Go Back
               </button>
             </div>
