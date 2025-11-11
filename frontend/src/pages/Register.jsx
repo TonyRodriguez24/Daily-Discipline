@@ -1,17 +1,39 @@
-export default function Register() {  
+import { register } from "../api/dailyDisciplineApi";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-  const handleSubmit = () => {
 
-  }
-
-  const handleChange = () => {
-
-  }
-
-  const formData = {
+export default function Register() { 
+  
+  const INITIAL_STATE = {
     username: "",
-    password: ""
-  }
+    password: "",
+  };
+  const [formData, setFormData] = useState(INITIAL_STATE);
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  const handleSubmit = async (e) => {
+      try {
+        e.preventDefault();
+        const {token} = await register(formData)
+        localStorage.setItem("token", token)
+        setToken(token)
+        navigate('/')
+        setFormData(INITIAL_STATE);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((previousData) => ({
+      ...previousData,
+      [name]: value,
+    }));
+  };
+
 
    const styles = "p-3 bg-stone-200 border-2 border-indigo-200 focus:outline-indigo-500 rounded-md";
 

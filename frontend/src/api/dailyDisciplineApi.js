@@ -20,8 +20,7 @@ export async function getQuote() {
 
 export async function register(formData) {
     const response = await axios.post(`${BASE_URL}/auth/register`, formData)
-    const token = response.data;
-    return token;
+    return response.data;
 }
 
 
