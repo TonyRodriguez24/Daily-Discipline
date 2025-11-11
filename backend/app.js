@@ -3,6 +3,7 @@ const app = express();
 const logsRoutes = require('./routes/logs')
 const authRoutes = require('./routes/auth')
 const quotesRoutes = require('./routes/quotes')
+const insightsRoutes = require('./routes/insights')
 
 const ExpressError = require('./expressError')
 const cors = require('cors');
@@ -11,6 +12,7 @@ app.use(express.json());
 app.use('/auth', authRoutes)
 app.use('/logs', logsRoutes);
 app.use('/quotes', quotesRoutes)
+app.use('/insights', insightsRoutes)
 
 
 //404 error handler

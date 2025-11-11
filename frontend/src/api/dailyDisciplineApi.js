@@ -65,3 +65,13 @@ export async function deleteLog(logId, token) {
     })
     return response;
 }
+
+export async function getAIInsights(last5Logs) {
+    try {
+        const response = await axios.post(`${BASE_URL}/insights`, { logs: last5Logs });
+        return response.data.insights; 
+    } catch (err) {
+        console.error("Failed to fetch AI insights:", err);
+        return "Could not generate insights at this time.";
+    }
+}

@@ -96,7 +96,7 @@ export default function History() {
             {monthLogs.map((log) => (
               <div
                 key={log.id}
-                className="bg-stone-200 border-3 text-black lg:w-1/5 mx-auto relative lg:mx-0 p-6 rounded-lg shadow-md border border-stone-700">
+                className="bg-stone-200 border-3 text-black lg:w-2/11 mx-auto relative lg:mx-0 p-6 rounded-lg shadow-md border border-stone-700">
                 <Link
                   to={`/daily-log/edit/${log.id}`}
                   className="bg-blue-400 absolute top-0 right-10 rounded-sm text-sm p-1 px-3 m-1">

@@ -4,7 +4,7 @@ export default function Navbar({ token, setToken }) {
   let navigate = useNavigate();
   return (
     <nav>
-      <ul className="flex justify-center w-full mx-auto h-18 text-black lg:text-lg items-center gap-4 lg:gap-15 bg-emerald-500 lg:px-20 border-b-4 border-emerald-900">
+      <ul className="flex justify-center w-full mx-auto h-18 text-black lg:text-lg items-center gap-4 lg:gap-15 bg-emerald-500 lg:px-20  border-emerald-900">
         {token && (
           <>
             <li>
