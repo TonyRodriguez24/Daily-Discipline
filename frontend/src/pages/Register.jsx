@@ -14,16 +14,15 @@ export default function Register() {
   const token = localStorage.getItem("token");
 
   const handleSubmit = async (e) => {
-      try {
-        e.preventDefault();
-        const {token} = await register(formData)
-        localStorage.setItem("token", token)
-        navigate('/')
-        setFormData(INITIAL_STATE);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+    e.preventDefault();
+    try {
+      await register(formData);
+      navigate("/login"); // redirect to login
+      setFormData(INITIAL_STATE);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
